@@ -1,27 +1,18 @@
 package edu.hm.bugproducer;
 
+import edu.hm.bugproducer.restAPI.TokenUtils;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.apache.http.HttpHeaders.USER_AGENT;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class RestTest {
 
@@ -55,4 +46,18 @@ public class RestTest {
         System.out.println("Response Code : "
                 + response.getStatusLine().getStatusCode());
     }
+
+    @Test
+    public void checkIfTokenIsValid() {
+        String exampleToken = TokenUtils.createToken("Tom", "123456");
+
+        assertTrue(TokenUtils.isValidToken(exampleToken));
+    }
+
+    /*@Test
+    public void checkIfTokeIsValidAfter5Minutes() throws InterruptedException {
+        String exampleToken = TokenUtils.createToken("Tom", "123456");
+        Thread.sleep(300000);
+        assertFalse(TokenUtils.isValidToken(exampleToken));
+    }*/
 }

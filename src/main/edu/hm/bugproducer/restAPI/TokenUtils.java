@@ -2,12 +2,6 @@ package edu.hm.bugproducer.restAPI;
 
 import org.apache.commons.codec.binary.Base64;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-
 public class TokenUtils {
 
     private static final int TIME_OFFSET = 13;
@@ -33,17 +27,16 @@ public class TokenUtils {
         return new String(tokenByte) + currTime;
     }
 
+    /**
+     * Checks if a token expired (5 Minutes)
+     *
+     * @param token
+     * @return
+     */
     public static boolean isValidToken(String token) {
-        boolean isValid = false;
         long oldTime = Long.parseLong(token.substring(token.length() - TIME_OFFSET));
-        long currTimed = System.currentTimeMillis();
+        long currTime = System.currentTimeMillis();
 
-        if (oldTime + TIME_TO_LIFE > currTimed) {
-            System.err.println("Abgelaufen");
-        } else {
-            System.err.println("Still valid");
-        }
-
-        return true;
+        return currTime < oldTime + TIME_TO_LIFE;
     }
 }
