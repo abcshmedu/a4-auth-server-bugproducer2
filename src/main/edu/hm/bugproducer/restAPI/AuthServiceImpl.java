@@ -1,16 +1,63 @@
 package edu.hm.bugproducer.restAPI;
 
-public class AuthServiceImpl implements AuthService {
+import javafx.util.Pair;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static edu.hm.bugproducer.restAPI.MediaServiceResult.MSR_OK;
+import static edu.hm.bugproducer.restAPI.MediaServiceResult.MSR_UNAUTHORIZED;
+
+public class
+AuthServiceImpl implements AuthService {
+
+    private String legitUser = "Joe Doe";
+    private String getLegitpassword = "geheim";
+    private Map<String, String> userKeyMap = new HashMap<>(); //user //
 
     @Override
-    public String createToken() {
-        //placeHolder
-        return null;
+    public Pair createToken(String user, String password) {
+        Pair<MediaServiceResult, String> result;
+        if (user.equals(legitUser) && password.equals(getLegitpassword)) {
+            if (userKeyMap.containsValue(user)) {
+                Set<String> tokenSet = getKeysByValue(userKeyMap, user);
+                String toCheck = tokenSet.iterator().next();
+                if (TokenUtils.isValidToken(toCheck)) {
+                    result = new Pair<>(MSR_OK, toCheck);
+                } else {
+                    userKeyMap.remove(toCheck);
+                    String token = TokenUtils.createToken(user, password);
+                    userKeyMap.put(token, user);
+                    result = new Pair<>(MSR_OK, token);
+                }
+            } else {
+                String token = TokenUtils.createToken(user, password);
+                userKeyMap.put(token, user);
+                result = new Pair<>(MSR_OK, token);
+            }
+            return result;
+        } else {
+            return new Pair(MSR_UNAUTHORIZED, "Du kommst hier nicht rein!!");
+
+        }
+
     }
 
     @Override
     public String verfiyToken() {
         //placeHolder+
-        return  null;
+        return null;
+    }
+
+    public static <T, E> Set<T> getKeysByValue(Map<T, E> map, E value) {
+        return map.entrySet()
+                .stream()
+                .filter(entry -> Objects.equals(entry.getValue(), value))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
     }
 }
+

@@ -1,9 +1,11 @@
 package edu.hm.bugproducer.restAPI;
 
 
+import javafx.util.Pair;
+
 public interface AuthService {
 
-    String createToken();
+    Pair createToken(String user, String password);
     String verfiyToken();
 
 }
