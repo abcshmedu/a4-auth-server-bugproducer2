@@ -47,9 +47,17 @@ AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String verfiyToken() {
-        //placeHolder+
-        return null;
+    public MediaServiceResult verifyToken(String token) {
+        if (userKeyMap.containsValue(token)) {
+            if (TokenUtils.isValidToken(token)) {
+                return MSR_OK;
+            } else {
+                userKeyMap.remove(token);
+                return MSR_UNAUTHORIZED;
+            }
+        } else {
+            return MSR_UNAUTHORIZED;
+        }
     }
 
     public static <T, E> Set<T> getKeysByValue(Map<T, E> map, E value) {
