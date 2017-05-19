@@ -51,13 +51,13 @@ public class RestTest {
     public void checkIfTokenIsValid() {
         String exampleToken = TokenUtils.createToken("Tom", "123456");
 
-        assertTrue(TokenUtils.isValidToken(exampleToken));
+        assertTrue(TokenUtils.isNotExpired(exampleToken));
     }
 
     /*@Test
     public void checkIfTokeIsValidAfter5Minutes() throws InterruptedException {
         String exampleToken = TokenUtils.createToken("Tom", "123456");
         Thread.sleep(300000);
-        assertFalse(TokenUtils.isValidToken(exampleToken));
+        assertFalse(TokenUtils.isNotExpired(exampleToken));
     }*/
 }

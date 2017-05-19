@@ -30,7 +30,7 @@ public class Main {
         String exampleToken = TokenUtils.createToken("Tom", "123456");
 
         System.err.println("TOKEN: " + exampleToken);
-        System.err.println("ISVALID: " + TokenUtils.isValidToken(exampleToken));
+        System.err.println("ISVALID: " + TokenUtils.isNotExpired(exampleToken));
 
         Server server = new Server(8082);
         ServletContextHandler handler = new ServletContextHandler(server, "/");

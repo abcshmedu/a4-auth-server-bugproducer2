@@ -33,7 +33,7 @@ public class TokenUtils {
      * @param token
      * @return
      */
-    public static boolean isValidToken(String token) {
+    public static boolean isNotExpired(String token) {
         long oldTime = Long.parseLong(token.substring(token.length() - TIME_OFFSET));
         long currTime = System.currentTimeMillis();
 

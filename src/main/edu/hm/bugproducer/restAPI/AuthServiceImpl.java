@@ -25,7 +25,7 @@ AuthServiceImpl implements AuthService {
             if (userKeyMap.containsValue(user)) {
                 Set<String> tokenSet = getKeysByValue(userKeyMap, user);
                 String toCheck = tokenSet.iterator().next();
-                if (TokenUtils.isValidToken(toCheck)) {
+                if (TokenUtils.isNotExpired(toCheck)) {
                     result = new Pair<>(MSR_OK, toCheck);
                 } else {
                     userKeyMap.remove(toCheck);
@@ -49,7 +49,7 @@ AuthServiceImpl implements AuthService {
     @Override
     public MediaServiceResult verifyToken(String token) {
         if (userKeyMap.containsValue(token)) {
-            if (TokenUtils.isValidToken(token)) {
+            if (TokenUtils.isNotExpired(token)) {
                 return MSR_OK;
             } else {
                 userKeyMap.remove(token);
