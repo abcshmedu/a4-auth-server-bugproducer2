@@ -27,7 +27,10 @@ public class Main {
         jetty.start();
         jetty.join();*/
 
-        System.err.println("TOKEN: " + TokenUtils.createToken("Tom", "123456", "10.01.2014"));
+        String exampleToken = TokenUtils.createToken("Tom", "123456");
+
+        System.err.println("TOKEN: " + exampleToken);
+        System.err.println("ISVALID: " + TokenUtils.isValidToken(exampleToken));
 
         Server server = new Server(8082);
         ServletContextHandler handler = new ServletContextHandler(server, "/");
