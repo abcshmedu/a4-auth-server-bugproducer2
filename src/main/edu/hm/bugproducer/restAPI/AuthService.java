@@ -5,7 +5,7 @@ import javafx.util.Pair;
 
 public interface AuthService {
 
-    Pair createToken(String user, String password);
+    Pair<MediaServiceResult, String> createToken(String user, String password);
     MediaServiceResult verifyToken(String token);
 
 }

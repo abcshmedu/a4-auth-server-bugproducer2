@@ -14,12 +14,12 @@ import static edu.hm.bugproducer.restAPI.MediaServiceResult.MSR_UNAUTHORIZED;
 public class
 AuthServiceImpl implements AuthService {
 
-    private String legitUser = "Joe Doe";
-    private String getLegitpassword = "geheim";
-    private Map<String, String> userKeyMap = new HashMap<>(); //user //
+    private final String legitUser = "Joe Doe";
+    private final String getLegitpassword = "geheim";
+    private final Map<String, String> userKeyMap = new HashMap<>(); //user //
 
     @Override
-    public Pair createToken(String user, String password) {
+    public Pair<MediaServiceResult, String> createToken(String user, String password) {
         Pair<MediaServiceResult, String> result;
         if (user.equals(legitUser) && password.equals(getLegitpassword)) {
             if (userKeyMap.containsValue(user)) {
@@ -38,11 +38,13 @@ AuthServiceImpl implements AuthService {
                 userKeyMap.put(token, user);
                 result = new Pair<>(MSR_OK, token);
             }
-            return result;
+
         } else {
-            return new Pair(MSR_UNAUTHORIZED, "Du kommst hier nicht rein!!");
+            result = new Pair<>(MSR_UNAUTHORIZED, "Du kommst hier nicht rein!!");
 
         }
+
+        return result;
 
     }
 

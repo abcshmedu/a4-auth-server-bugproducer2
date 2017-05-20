@@ -14,7 +14,7 @@ import java.io.IOException;
 import static org.apache.http.HttpHeaders.USER_AGENT;
 import static org.junit.Assert.assertTrue;
 
-public class RestTest {
+public class RestApiTest {
 
     private static final String URL = "http://localhost:8082";
 
@@ -47,17 +47,5 @@ public class RestTest {
                 + response.getStatusLine().getStatusCode());
     }
 
-    @Test
-    public void checkIfTokenIsValid() {
-        String exampleToken = TokenUtils.createToken("Tom", "123456");
 
-        assertTrue(TokenUtils.isNotExpired(exampleToken));
-    }
-
-    /*@Test
-    public void checkIfTokeIsValidAfter5Minutes() throws InterruptedException {
-        String exampleToken = TokenUtils.createToken("Tom", "123456");
-        Thread.sleep(300000);
-        assertFalse(TokenUtils.isNotExpired(exampleToken));
-    }*/
 }
