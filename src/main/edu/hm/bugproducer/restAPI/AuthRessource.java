@@ -18,7 +18,6 @@ public class AuthRessource {
     public Response login(@FormParam("user") String user,@FormParam("password") String password) {
 
         Pair<MediaServiceResult, String> result = authservice.createToken(user,password);
-
         return Response
                 .status(result.getKey().getCode())
                 .entity(result.getValue())
@@ -27,10 +26,14 @@ public class AuthRessource {
     }
 
     @GET
-    @Path ("/verify/")
+    @Path ("/verify/{token}")
     //@Produces(MediaType.APPLICATION_JSON)
-    public Response getVerify(@QueryParam("token") String token) {
-        return null;
+    public Response getVerify(@PathParam("token") String token) {
+        MediaServiceResult result = authservice.verifyToken(token);
+        return Response
+                .status(result.getCode())
+                .build();
+
     }
 
 

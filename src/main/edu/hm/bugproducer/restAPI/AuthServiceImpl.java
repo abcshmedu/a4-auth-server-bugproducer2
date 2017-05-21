@@ -16,7 +16,7 @@ AuthServiceImpl implements AuthService {
 
     private final String legitUser = "John Doe";
     private final String getLegitpassword = "geheim";
-    private final Map<String, String> userKeyMap = new HashMap<>(); //user //
+    private final static Map<String, String> userKeyMap = new HashMap<>(); //user //
 
     @Override
     public Pair<MediaServiceResult, String> createToken(String user, String password) {
@@ -40,7 +40,7 @@ AuthServiceImpl implements AuthService {
             }
 
         } else {
-            result = new Pair<>(MSR_UNAUTHORIZED, "Du kommst hier nicht rein!!");
+            result = new Pair<>(MSR_UNAUTHORIZED, "Du_kommst_hier_nicht_rein!!");
 
         }
 
@@ -50,7 +50,7 @@ AuthServiceImpl implements AuthService {
 
     @Override
     public MediaServiceResult verifyToken(String token) {
-        if (userKeyMap.containsValue(token)) {
+        if (userKeyMap.containsKey(token)) {
             if (TokenUtils.isNotExpired(token)) {
                 return MSR_OK;
             } else {
