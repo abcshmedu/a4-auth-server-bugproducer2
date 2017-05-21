@@ -5,10 +5,12 @@ import javafx.util.Pair;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
+@Path("/auth")
 public class AuthRessource {
 
     private AuthServiceImpl authservice = new AuthServiceImpl();
+
+
 
     @POST
     @Path("/login/")

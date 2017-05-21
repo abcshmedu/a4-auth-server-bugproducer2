@@ -14,7 +14,7 @@ import static edu.hm.bugproducer.restAPI.MediaServiceResult.MSR_UNAUTHORIZED;
 public class
 AuthServiceImpl implements AuthService {
 
-    private final String legitUser = "Joe Doe";
+    private final String legitUser = "John Doe";
     private final String getLegitpassword = "geheim";
     private final Map<String, String> userKeyMap = new HashMap<>(); //user //
 

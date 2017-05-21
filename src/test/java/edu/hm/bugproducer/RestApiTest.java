@@ -14,6 +14,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +28,8 @@ public class RestApiTest {
 
 
     //URL
-    private static final String URL = "http://localhost:8082";
-    private static final String URLLOGIN = "http://localhost:8082/login/";
+    private static final String URL = "http://localhost:8082/auth/";
+    private static final String URLLOGIN = "http://localhost:8082/auth/login/";
 
     //User
     private static final String USER = "John Doe";
@@ -78,14 +80,35 @@ public class RestApiTest {
 
         loginToWebsite.setEntity(new UrlEncodedFormEntity(userData));
         loginToWebsite.addHeader("content-Type", "application/x-www-form-urlencoded");
-        HttpResponse response =client.execute(loginToWebsite);
+        HttpResponse response = client.execute(loginToWebsite);
+        writeContent(response);
 
         assertEquals(200,response.getStatusLine().getStatusCode());
 
-        System.err.print("TOKEN: "+response.getEntity().toString());
+    }
 
+    @Test
+    public void testLoginWithCurruptData() throws IOException {
+        List<NameValuePair> userData = new ArrayList<>();
+        userData.add(new BasicNameValuePair("user",CORRUPTUSER));
+        userData.add(new BasicNameValuePair("password",CORRUPTPASSWORD));
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost loginToWebsite = new HttpPost(URLLOGIN);
+        loginToWebsite.setEntity(new UrlEncodedFormEntity(userData));
+        loginToWebsite.addHeader("content-Type", "application/x-www-form-urlencoded");
+        HttpResponse response =client.execute(loginToWebsite);
+        assertEquals(401,response.getStatusLine().getStatusCode());
+        writeContent(response);
 
+    }
 
+    private void writeContent(HttpResponse response) throws IOException {
+        OutputStream out = System.out;
+        InputStream input = response.getEntity().getContent();
+        for(int i=input.read(); i>=0; i=input.read()){
+            out.write(i);
+            out.flush();
+        }
     }
 
 
