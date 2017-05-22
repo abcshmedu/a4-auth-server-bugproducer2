@@ -1,7 +1,10 @@
 package edu.hm.bugproducer.restAPI;
 
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.impl.crypto.MacProvider;
 import javafx.util.Pair;
 
+import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -49,16 +52,36 @@ AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public MediaServiceResult verifyToken(String token) {
+    public Pair<MediaServiceResult, Jwt> verifyToken(String token) {
+        Pair<MediaServiceResult, Jwt> result = new Pair<>(MSR_UNAUTHORIZED, null);
         if (userKeyMap.containsKey(token)) {
             if (TokenUtils.isNotExpired(token)) {
-                return MSR_OK;
+
+                Key key = MacProvider.generateKey();
+                Jwt jwt;
+
+                Map<String, Object> headerClaims = new HashMap();
+                headerClaims.put("type", Header.JWT_TYPE);
+                String compactJws = Jwts.builder()
+                        .setSubject(userKeyMap.get(token))
+                        .setHeader(headerClaims)
+                        .signWith(SignatureAlgorithm.HS512, key)
+                        .compact();
+
+                try {
+
+                    jwt = Jwts.parser().setSigningKey(key).parseClaimsJws(compactJws);
+                    result = new Pair<>(MSR_OK, jwt);
+                    return result;
+                } catch (SignatureException e) {
+                    return result;
+                }
             } else {
                 userKeyMap.remove(token);
-                return MSR_UNAUTHORIZED;
+                return result;
             }
         } else {
-            return MSR_UNAUTHORIZED;
+            return result;
         }
     }
 

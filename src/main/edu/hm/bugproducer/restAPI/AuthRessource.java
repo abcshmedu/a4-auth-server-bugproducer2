@@ -1,5 +1,6 @@
 package edu.hm.bugproducer.restAPI;
 
+import io.jsonwebtoken.Jwt;
 import javafx.util.Pair;
 
 import javax.ws.rs.*;
@@ -29,9 +30,10 @@ public class AuthRessource {
     @Path ("/verify/{token}")
     //@Produces(MediaType.APPLICATION_JSON)
     public Response getVerify(@PathParam("token") String token) {
-        MediaServiceResult result = authservice.verifyToken(token);
+        Pair<MediaServiceResult, Jwt> result = authservice.verifyToken(token);
         return Response
-                .status(result.getCode())
+                .status(result.getKey().getCode())
+                //.entity(result.getValue())
                 .build();
 
     }
