@@ -122,7 +122,12 @@ public class RestApiTest {
         HttpGet verify = new HttpGet(URLVERIFY+token);
 
 
+
+
         HttpResponse response2 = client.execute(verify);
+
+        writeContent(response2);
+
         assertEquals(200,response2.getStatusLine().getStatusCode());
 
 

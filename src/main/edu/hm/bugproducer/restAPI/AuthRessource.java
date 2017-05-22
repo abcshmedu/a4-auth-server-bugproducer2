@@ -28,12 +28,12 @@ public class AuthRessource {
 
     @GET
     @Path ("/verify/{token}")
-    //@Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getVerify(@PathParam("token") String token) {
         Pair<MediaServiceResult, Jwt> result = authservice.verifyToken(token);
         return Response
                 .status(result.getKey().getCode())
-                //.entity(result.getValue())
+                .entity(result.getValue())
                 .build();
 
     }
