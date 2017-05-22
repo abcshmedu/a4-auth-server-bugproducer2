@@ -70,7 +70,7 @@ public class RestApiTest {
     }
 
     @Test
-    public void testLoginWithVaildData() throws IOException {
+    public void testLoginWithValidData() throws IOException {
         List<NameValuePair> userData = new ArrayList<>();
 
         userData.add(new BasicNameValuePair("user",USER));
@@ -90,7 +90,7 @@ public class RestApiTest {
     }
 
     @Test
-    public void testLoginWithCurruptData() throws IOException {
+    public void testLoginWithCorruptData() throws IOException {
         List<NameValuePair> userData = new ArrayList<>();
         userData.add(new BasicNameValuePair("user",CORRUPTUSER));
         userData.add(new BasicNameValuePair("password",CORRUPTPASSWORD));
@@ -105,7 +105,7 @@ public class RestApiTest {
     }
 
     @Test
-    public void testValidWithVaildData() throws IOException {
+    public void testValidWithValidData() throws IOException {
         List<NameValuePair> userData = new ArrayList<>();
         List<NameValuePair> tokenData = new ArrayList<>();
 
