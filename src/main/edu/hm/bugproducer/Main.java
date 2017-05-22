@@ -12,7 +12,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 public class Main {
 
     public static final String APP_URL = "/";
-    public static final int PORT = 8084;
+    public static final int PORT = 8082;
     public static final String WEBAPP_DIR = "./src/main/webapp/";
 
     /**
@@ -22,12 +22,9 @@ public class Main {
      * @throws Exception might throw for several reasons.
      */
     public static void main(String... args) throws Exception {
-        /*Server jetty = new Server(PORT);
-
-        jetty.start();
-        jetty.join();*/
-
-        String exampleToken = TokenUtils.createToken("Tom", "123456");
+        JettyStarter jettyStarter = new JettyStarter();
+        jettyStarter.startJetty();
+        /*String exampleToken = TokenUtils.createToken("Tom", "123456");
 
         System.err.println("TOKEN: " + exampleToken);
         System.err.println("ISVALID: " + TokenUtils.isNotExpired(exampleToken));
@@ -35,7 +32,7 @@ public class Main {
         Server server = new Server(8082);
         ServletContextHandler handler = new ServletContextHandler(server, "/");
         handler.addServlet(ExampleServlet.class, "/");
-        server.start();
+        server.start();*/
     }
 
 }
