@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.impl.crypto.MacProvider;
 import javafx.util.Pair;
 
+import java.io.UnsupportedEncodingException;
 import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,26 +53,31 @@ AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Pair<MediaServiceResult, Jwt> verifyToken(String token) {
-        Pair<MediaServiceResult, Jwt> result = new Pair<>(MSR_UNAUTHORIZED, null);
+    public Pair<MediaServiceResult, String> verifyToken(String token) {
+        Pair<MediaServiceResult, String> result = new Pair<>(MSR_UNAUTHORIZED, null);
         if (userKeyMap.containsKey(token)) {
             if (TokenUtils.isNotExpired(token)) {
 
-                Key key = MacProvider.generateKey();
-                Jwt jwt;
+
+
 
                 Map<String, Object> headerClaims = new HashMap();
                 headerClaims.put("type", Header.JWT_TYPE);
-                String compactJws = Jwts.builder()
-                        .setSubject(userKeyMap.get(token))
-                        .setHeader(headerClaims)
-                        .signWith(SignatureAlgorithm.HS512, key)
-                        .compact();
+                String compactJws = null;
+                try {
+                    compactJws = Jwts.builder()
+                            .setSubject(userKeyMap.get(token))
+                            .setHeader(headerClaims)
+                            .signWith(SignatureAlgorithm.HS256, "secret".getBytes("UTF-8"))
+                            .compact();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
 
                 try {
 
-                    jwt = Jwts.parser().setSigningKey(key).parseClaimsJws(compactJws);
-                    result = new Pair<>(MSR_OK, jwt);
+
+                    result = new Pair<>(MSR_OK, compactJws);
                     return result;
                 } catch (SignatureException e) {
                     return result;
