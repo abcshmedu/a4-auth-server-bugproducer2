@@ -53,7 +53,7 @@ public class AuthRessource {
     @Path ("/verify/{token}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getVerify(@PathParam("token") String token) {
-        Pair<MediaServiceResult, Jwt> result = authservice.verifyToken(token);
+        Pair<MediaServiceResult, String> result = authservice.verifyToken(token);
         return Response
                 .status(result.getKey().getCode())
                 .entity(result.getValue())

@@ -21,6 +21,7 @@ public interface AuthService {
      * @return status code with token or message
      */
     Pair<MediaServiceResult, String> createToken(String user, String password);
+    Pair<MediaServiceResult, String> verifyToken(String token);
     /**
      * verifyToken method.
      * checks if the token we get is in our userKeyMap and if it is expired and creating a jwt
