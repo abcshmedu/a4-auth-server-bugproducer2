@@ -14,31 +14,54 @@ import java.util.stream.Collectors;
 import static edu.hm.bugproducer.restAPI.MediaServiceResult.MSR_OK;
 import static edu.hm.bugproducer.restAPI.MediaServiceResult.MSR_UNAUTHORIZED;
 
+/**
+ * AuthService class.
+ * @author Mark Tripolt
+ * @author Johannes Arzt
+ * @author Tom Maier
+ * @author Patrick Kuntz
+ */
 public class
 AuthServiceImpl implements AuthService {
-
+    /**
+     * name of a legitUser.
+     */
     private final String legitUser = "John Doe";
-    private final String getLegitpassword = "geheim";
-    private final static Map<String, String> userKeyMap = new HashMap<>(); //user //
+    /**
+     * a legit password.
+     */
+    private final String getLegitPassword = "geheim";
+    /**
+     * map that contains a user and his password.
+     */
+    private static final Map<String, String> USERKEYMAP = new HashMap<>(); //user //
 
+    /**
+     * createToken method.
+     * takes the user and this password and compare it with a legit user name and a legit user password,
+     * if the USERKEYMAP contains the user, it will put his token in a set and checks if it is expired or not
+     * @param user name of user
+     * @param password unique string choose by user
+     * @return status code with token or message
+     */
     @Override
     public Pair<MediaServiceResult, String> createToken(String user, String password) {
         Pair<MediaServiceResult, String> result;
-        if (user.equals(legitUser) && password.equals(getLegitpassword)) {
-            if (userKeyMap.containsValue(user)) {
-                Set<String> tokenSet = getKeysByValue(userKeyMap, user);
+        if (user.equals(legitUser) && password.equals(getLegitPassword)) {
+            if (USERKEYMAP.containsValue(user)) {
+                Set<String> tokenSet = getKeysByValue(USERKEYMAP, user);
                 String toCheck = tokenSet.iterator().next();
                 if (TokenUtils.isNotExpired(toCheck)) {
                     result = new Pair<>(MSR_OK, toCheck);
                 } else {
-                    userKeyMap.remove(toCheck);
+                    USERKEYMAP.remove(toCheck);
                     String token = TokenUtils.createToken(user, password);
-                    userKeyMap.put(token, user);
+                    USERKEYMAP.put(token, user);
                     result = new Pair<>(MSR_OK, token);
                 }
             } else {
                 String token = TokenUtils.createToken(user, password);
-                userKeyMap.put(token, user);
+                USERKEYMAP.put(token, user);
                 result = new Pair<>(MSR_OK, token);
             }
 
@@ -51,10 +74,16 @@ AuthServiceImpl implements AuthService {
 
     }
 
+    /**
+     * verifyToken method.
+     * checks if the token we get is in our USERKEYMAP and if it is expired and creating a jwt
+     * @param token unique string
+     * @return status code and null if we cant verify the token or status code with a jwt if it is okay
+     */
     @Override
     public Pair<MediaServiceResult, Jwt> verifyToken(String token) {
         Pair<MediaServiceResult, Jwt> result = new Pair<>(MSR_UNAUTHORIZED, null);
-        if (userKeyMap.containsKey(token)) {
+        if (USERKEYMAP.containsKey(token)) {
             if (TokenUtils.isNotExpired(token)) {
 
                 Key key = MacProvider.generateKey();
@@ -63,7 +92,7 @@ AuthServiceImpl implements AuthService {
                 Map<String, Object> headerClaims = new HashMap();
                 headerClaims.put("type", Header.JWT_TYPE);
                 String compactJws = Jwts.builder()
-                        .setSubject(userKeyMap.get(token))
+                        .setSubject(USERKEYMAP.get(token))
                         .setHeader(headerClaims)
                         .signWith(SignatureAlgorithm.HS512, key)
                         .compact();
@@ -77,7 +106,7 @@ AuthServiceImpl implements AuthService {
                     return result;
                 }
             } else {
-                userKeyMap.remove(token);
+                USERKEYMAP.remove(token);
                 return result;
             }
         } else {
@@ -85,7 +114,16 @@ AuthServiceImpl implements AuthService {
         }
     }
 
-    public static <T, E> Set<T> getKeysByValue(Map<T, E> map, E value) {
+    /**
+     * getKeysByValue method.
+     * gets the key from a map just by using the user
+     * @param map that contains key and value
+     * @param value by that we get the key
+     * @param <T> type of key
+     * @param <E> type of value
+     * @return filtered keys to a set
+     */
+    private static <T, E> Set<T> getKeysByValue(Map<T, E> map, E value) {
         return map.entrySet()
                 .stream()
                 .filter(entry -> Objects.equals(entry.getValue(), value))

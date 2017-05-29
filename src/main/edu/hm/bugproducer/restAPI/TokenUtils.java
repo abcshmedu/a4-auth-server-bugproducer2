@@ -2,13 +2,20 @@ package edu.hm.bugproducer.restAPI;
 
 import org.apache.commons.codec.binary.Base64;
 
+/**
+ * TokenUtils class.
+ * @author Mark Tripolt
+ * @author Johannes Arzt
+ * @author Tom Maier
+ * @author Patrick Kuntz
+ */
 public class TokenUtils {
 
     private static final int TIME_OFFSET = 13;
     private static final int TIME_TO_LIFE = 300000;
 
     /**
-     * Creates a random TokenUtils
+     * Creates a random TokenUtils.
      *
      * @param userName username
      * @param password password
@@ -28,10 +35,10 @@ public class TokenUtils {
     }
 
     /**
-     * Checks if a token expired (5 Minutes)
+     * Checks if a token expired (5 Minutes).
      *
-     * @param token
-     * @return
+     * @param token string code
+     * @return the time left until the token expires
      */
     public static boolean isNotExpired(String token) {
         long oldTime = Long.parseLong(token.substring(token.length() - TIME_OFFSET));

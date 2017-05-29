@@ -9,6 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.http.HttpStatus;
 
+/**
+ * ExampleServlet class.
+ * @author Mark Tripolt
+ * @author Johannes Arzt
+ * @author Tom Maier
+ * @author Patrick Kuntz
+ */
 public class ExampleServlet extends HttpServlet {
 
     @Override
