@@ -1,6 +1,5 @@
 package edu.hm.bugproducer.restAPI;
 
-import io.jsonwebtoken.Jwt;
 import javafx.util.Pair;
 
 import javax.ws.rs.*;

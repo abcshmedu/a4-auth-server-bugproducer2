@@ -1,7 +1,7 @@
 package edu.hm.bugproducer.restAPI;
 
 
-import io.jsonwebtoken.Jwt;
+
 import javafx.util.Pair;
 
 /**
@@ -21,13 +21,12 @@ public interface AuthService {
      * @return status code with token or message
      */
     Pair<MediaServiceResult, String> createToken(String user, String password);
-    Pair<MediaServiceResult, String> verifyToken(String token);
+
     /**
      * verifyToken method.
      * checks if the token we get is in our userKeyMap and if it is expired and creating a jwt
      * @param token unique string
      * @return status code and null if we cant verify the token or status code with a jwt if it is okay
      */
-    Pair<MediaServiceResult, Jwt> verifyToken(String token);
-
+    Pair<MediaServiceResult, String> verifyToken(String token);
 }
