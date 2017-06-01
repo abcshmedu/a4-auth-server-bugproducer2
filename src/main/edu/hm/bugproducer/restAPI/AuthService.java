@@ -2,6 +2,7 @@ package edu.hm.bugproducer.restAPI;
 
 
 
+import edu.hm.bugproducer.Status.StatusMgnt;
 import javafx.util.Pair;
 
 /**
@@ -20,7 +21,7 @@ public interface AuthService {
      * @param password unique string choose by user
      * @return status code with token or message
      */
-    Pair<MediaServiceResult, String> createToken(String user, String password);
+    Pair<StatusMgnt, String> createToken(String user, String password);
 
     /**
      * verifyToken method.
@@ -28,5 +29,5 @@ public interface AuthService {
      * @param token unique string
      * @return status code and null if we cant verify the token or status code with a jwt if it is okay
      */
-    Pair<MediaServiceResult, String> verifyToken(String token);
+    Pair<StatusMgnt, String> verifyToken(String token);
 }

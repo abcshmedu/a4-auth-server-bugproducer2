@@ -1,5 +1,6 @@
 package edu.hm.bugproducer.restAPI;
 
+import edu.hm.bugproducer.Status.StatusMgnt;
 import io.jsonwebtoken.*;
 
 import javafx.util.Pair;
@@ -11,8 +12,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static edu.hm.bugproducer.restAPI.MediaServiceResult.MSR_OK;
-import static edu.hm.bugproducer.restAPI.MediaServiceResult.MSR_UNAUTHORIZED;
+import static edu.hm.bugproducer.Status.MediaServiceResult.MSR_OK;
+import static edu.hm.bugproducer.Status.MediaServiceResult.MSR_UNAUTHORIZED;
 
 /**
  * AuthService class.
@@ -38,28 +39,28 @@ AuthServiceImpl implements AuthService {
     private static final Map<String, String> USERKEYMAP = new HashMap<>(); //user //
 
     @Override
-    public Pair<MediaServiceResult, String> createToken(String user, String password) {
-        Pair<MediaServiceResult, String> result;
+    public Pair<StatusMgnt, String> createToken(String user, String password) {
+        Pair<StatusMgnt, String> result;
         if (user.equals(legitUser) && password.equals(getLegitpassword)) {
             if (USERKEYMAP.containsValue(user)) {
                 Set<String> tokenSet = getKeysByValue(USERKEYMAP, user);
                 String toCheck = tokenSet.iterator().next();
                 if (TokenUtils.isNotExpired(toCheck)) {
-                    result = new Pair<>(MSR_OK, toCheck);
+                    result = new Pair<>(new StatusMgnt(MSR_OK,"ok"), toCheck);
                 } else {
                     USERKEYMAP.remove(toCheck);
                     String token = TokenUtils.createToken(user, password);
                     USERKEYMAP.put(token, user);
-                    result = new Pair<>(MSR_OK, token);
+                    result = new Pair<>(new StatusMgnt(MSR_OK,"ok"), token);
                 }
             } else {
                 String token = TokenUtils.createToken(user, password);
                 USERKEYMAP.put(token, user);
-                result = new Pair<>(MSR_OK, token);
+                result = new Pair<>(new StatusMgnt(MSR_OK,"ok"),token);
             }
 
         } else {
-            result = new Pair<>(MSR_UNAUTHORIZED, "Du_kommst_hier_nicht_rein!!");
+            result = new Pair<>(new StatusMgnt(MSR_UNAUTHORIZED,"Wrong Login credentials"),"");
 
         }
 
@@ -68,13 +69,10 @@ AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Pair<MediaServiceResult, String> verifyToken(String token) {
-        Pair<MediaServiceResult, String> result = new Pair<>(MSR_UNAUTHORIZED, null);
+    public Pair<StatusMgnt, String> verifyToken(String token) {
+        Pair<StatusMgnt, String> result = new Pair<>(new StatusMgnt(MSR_UNAUTHORIZED,"unauthorized user"), null);
         if (USERKEYMAP.containsKey(token)) {
             if (TokenUtils.isNotExpired(token)) {
-
-
-
 
                 Map<String, Object> headerClaims = new HashMap();
                 headerClaims.put("type", Header.JWT_TYPE);
@@ -92,7 +90,7 @@ AuthServiceImpl implements AuthService {
                 try {
 
 
-                    result = new Pair<>(MSR_OK, compactJws);
+                    result = new Pair<>(new StatusMgnt(MSR_OK,"ok"), compactJws);
                     return result;
                 } catch (SignatureException e) {
                     return result;

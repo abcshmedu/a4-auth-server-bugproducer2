@@ -1,8 +1,7 @@
 package edu.hm.bugproducer.restAPI;
 
-import edu.hm.bugproducer.model.Error;
+import edu.hm.bugproducer.Status.StatusMgnt;
 import javafx.util.Pair;
-import org.json.JSONObject;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -37,19 +36,18 @@ public class AuthRessource {
     //@Consumes(MediaType.APPLICATION_JSON)
     public Response login(@FormParam("user") String user, @FormParam("password") String password) {
 
-        Pair<MediaServiceResult, String> result = authservice.createToken(user, password);
-        if (result.getKey().getCode() == 401) {
-            Error error = new Error(result.getKey().getCode(),"Wrong Login credentials");
+        Pair<StatusMgnt, String> result = authservice.createToken(user, password);
+        if (result.getKey().getResult().getCode()==401){
 
             return Response
-                    .status(result.getKey().getCode())
-                    .entity(error)
+                    .status(result.getKey().getResult().getCode())
+                    .entity(result.getKey())
                     .build();
         }else {
 
 
             return Response
-                    .status(result.getKey().getCode())
+                    .status(result.getKey().getResult().getCode())
                     .entity(result.getValue())
                     .build();
         }
@@ -68,16 +66,15 @@ public class AuthRessource {
     @Path("/verify/{token}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getVerify(@PathParam("token") String token) {
-        Pair<MediaServiceResult, String> result = authservice.verifyToken(token);
-        if (result.getKey().getCode() == 401) {
-            Error error = new Error(result.getKey().getCode(),"unauthorized user");
+        Pair<StatusMgnt, String> result = authservice.verifyToken(token);
+        if (result.getKey().getResult().getCode() == 401) {
             return Response
-                    .status(result.getKey().getCode())
-                    .entity(error)
+                    .status(result.getKey().getResult().getCode())
+                    .entity(result.getKey())
                     .build();
         } else {
             return Response
-                    .status(result.getKey().getCode())
+                    .status(result.getKey().getResult().getCode())
                     .entity(result.getValue())
                     .build();
         }

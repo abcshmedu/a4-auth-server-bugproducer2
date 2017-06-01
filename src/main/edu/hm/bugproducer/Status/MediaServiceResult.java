@@ -1,4 +1,6 @@
-package edu.hm.bugproducer.restAPI;
+package edu.hm.bugproducer.Status;
+
+import edu.hm.bugproducer.Status.Status;
 
 /**
  * MediaServiceResult enum.
