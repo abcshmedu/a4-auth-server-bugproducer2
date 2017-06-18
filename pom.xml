@@ -4,7 +4,7 @@
     <groupId>edu.hm.authserver</groupId>
     <artifactId>AuthServer</artifactId>
     <version>0.1-SNAPSHOT</version>
-
+    <packaging>war</packaging>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
