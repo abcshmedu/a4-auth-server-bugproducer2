@@ -150,7 +150,7 @@ public class RestApiTest {
         loginToWebsite.addHeader("content-Type", "application/x-www-form-urlencoded");
         HttpResponse response = client.execute(loginToWebsite);
 
-        String token = IOUtils.toString(response.getEntity().getContent());
+        String token = "edfghjsdfvbsdfghj23467845678";
         tokenData.add(new BasicNameValuePair("token", token));
         HttpGet verify = new HttpGet(URLVERIFY + token);
 
